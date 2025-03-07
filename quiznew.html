@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Time-Sensitive Quiz</title>
+<link rel="stylesheet" href="quiz.css">
+
+<style>
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background: #0c192c;
+  color: #ffffff;
+}
+#question-container {
+  margin: 30px auto;
+  width: 50%;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+border-radius: 20px;
+border: 1px solid rgba(255, 255, 255, 0.18);
+box-shadow: 0 8px 37px 0 rgba(0, 0, 0, 0.37);
+}
+#timer {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+.answer-button {
+  margin: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+#score {
+    margin-top: 20px;
+}
+</style>
+</head>
+<body>
+ <!-- Header Section Begin 
+ <header class="header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="header__logo">
+                    <a href="./index.html">
+                        <img src="img/logo.png" height="25vh" alt="Bible Arcade logo">
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="header__nav">
+                    <nav class="header__menu mobile-menu">
+                        <ul>
+                            <li class="active"><a href="./index.html">Home</a></li>
+                            <li><a href="#">Categories <span class="arrow_carrot-down"></span></a>
+                                <ul class="dropdown">
+                                    
+                                    <li><a href="./anime-details.html">Quiz</a></li>
+                                    <li><a href="./ar.html">Augmented Reality</a></li>
+                                    <li><a href="./quizcreate.html">QuizCreate</a></li>
+                                    <li><a href="./signup.html">Sign Up</a></li>
+                                    <li><a href="./login.html">Login</a></li>
+                                </ul>
+                            </li>
+                        
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="header__right">
+                    <a href="#" class="search-switch"><span class="icon_search"></span></a>
+                    <a href="./login.html"><span class="icon_profile"></span></a>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+    </div>
+</header>
+<!-- Header End -->
+
+    <br> <br>
+  <h1 style="color: #ffffff;">Test your speed!</h1>
+  <h2 style="color: #ffffff;"> Good Luck</h2>
+  <div id="question-container">
+    <div id="timer"></div>
+    <div id="question"></div>
+    <div id="answers"></div>
+  </div>
+  <div id="score">
+    Wins: <span id="wins">0</span> | Losses: <span id="losses">0</span>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "How many chapters are in Genesis",
+        answers: ["30", "40", "50", "60"],
+        correctAnswer: "50",
+        time: 5, // seconds
+      },
+      {
+        question: "Name the son of Ochran",
+        answers: ["Benjamin", "Pagiel", "Benoni", "Paul"],
+        correctAnswer: "Pagiel",
+        time: 5,
+      },
+      {
+        question: "Why is Rahab a hero of faith",
+        answers: ["she prayed", "she helped Caleb escape", "she followed commndments"],
+        correctAnswer: "she helped Caleb escape",
+        time: 8,
+      },
+      {
+        question: "How many shekels of silver did Hosea pay for a wife?",
+        answers: ["10", "15", "20", "25"],
+        correctAnswer: "15",
+        time: 12,
+      },
+        {
+        question: "Who is the son of perdition",
+        answers: ["Judas", "Satan", "Jesus", "Simon"],
+        correctAnswer: "Satan",
+        time: 7,
+      },
+      {
+        question: "Who is the first disciple?",
+        answers: ["Matthew", "Peter", "Andrew", "Philip"],
+        correctAnswer: "Philip",
+        time: 7,
+      },
+      {
+        question: "Number of verses in Revelations",
+        answers: ["700", "504", "676", "404"],
+        correctAnswer: "404",
+        time: 7,
+      },
+    ];
+
+    let currentQuestionIndex = 0;
+    let timeLeft;
+    let timerInterval;
+    let wins = 0;
+    let losses = 0;
+
+    function displayQuestion() {
+      const questionContainer = document.getElementById("question-container");
+      const questionElement = document.getElementById("question");
+      const answersElement = document.getElementById("answers");
+      const timerElement = document.getElementById("timer");
+
+      const question = questions[currentQuestionIndex];
+      questionElement.textContent = question.question;
+      answersElement.innerHTML = "";
+
+      question.answers.forEach((answer) => {
+        const button = document.createElement("button");
+        button.textContent = answer;
+        button.classList.add("answer-button");
+        button.addEventListener("click", () => checkAnswer(answer));
+        answersElement.appendChild(button);
+      });
+
+      timeLeft = question.time;
+      timerElement.textContent = `Time: ${timeLeft}s`;
+
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timerElement.textContent = `Time: ${timeLeft}s`;
+        if (timeLeft <= 0) {
+          checkAnswer(null); // Time's up
+        }
+      }, 1000);
+    }
+
+    function checkAnswer(answer) {
+      clearInterval(timerInterval);
+      const question = questions[currentQuestionIndex];
+      if (answer === question.correctAnswer) {
+        wins++;
+        document.getElementById("wins").textContent = wins;
+      } else {
+        losses++;
+        document.getElementById("losses").textContent = losses;
+      }
+
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        displayQuestion();
+      } else {
+          alert("Quiz Completed! Wins: " + wins + " Losses: " + losses);
+      }
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    // Shuffle the questions array for randomization
+    shuffleArray(questions);
+
+    displayQuestion();
+  </script>
+</body>
+</html>

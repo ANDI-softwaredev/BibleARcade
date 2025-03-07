@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz Question Generator</title>
+</head>
+<body>
+    <h1>Quiz Question Generator</h1>
+
+    <form id="pdfForm" enctype="multipart/form-data">
+        <label for="pdf_file">Upload PDF:</label>
+        <input type="file" id="pdf_file" name="pdf_file">
+        <button type="submit">Generate Question from PDF</button>
+    </form>
+
+    <form id="textForm">
+        <label for="text_input">Enter Text:</label>
+        <textarea id="text_input" name="text_input" rows="5" cols="50"></textarea>
+        <button type="submit">Generate Question from Text</button>
+    </form>
+
+    <div id="questionDisplay"></div>
+
+    <script src="../static/script.js"></script>
+</body>
+</html>
